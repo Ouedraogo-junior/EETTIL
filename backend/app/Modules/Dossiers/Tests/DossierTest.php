@@ -100,6 +100,7 @@ class DossierTest extends TestCase
         $this->getJson('/api/v1/dossiers?status=en_cours')->assertJsonCount(1, 'data');
         $this->getJson('/api/v1/dossiers?service=manutention')->assertJsonCount(1, 'data');
         $this->getJson('/api/v1/dossiers?service=transit')->assertJsonCount(1, 'data')->assertJsonPath('data.0.number', '2026-0001');
+        $this->getJson("/api/v1/dossiers?client_id={$faso->id}")->assertJsonCount(1, 'data')->assertJsonPath('data.0.number', '2026-0002');
     }
 
     public function test_la_fiche_inclut_le_client_et_le_suivi(): void

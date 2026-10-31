@@ -6,6 +6,7 @@ import { ConfirmDialog } from '@/core/ui/ConfirmDialog'
 import { useToast } from '@/core/ui/toast-context'
 import { useMe } from '@/modules/auth/hooks'
 import { useClient, useDeleteClient } from './hooks'
+import { ClientDossiersPanel } from '@/modules/dossiers/ClientDossiersPanel'
 
 function Info({ label, children }: { label: string; children?: ReactNode }) {
   return (
@@ -100,15 +101,7 @@ export default function ClientDetailPage() {
           </div>
         </section>
 
-        <section className="panel">
-          <div className="hd">
-            <h3>Dossiers, factures et paiements</h3>
-          </div>
-          <div className="empty">
-            <b>Bientôt disponible</b>
-            L’historique du client apparaîtra ici dès les étapes 3 à 5.
-          </div>
-        </section>
+        <ClientDossiersPanel clientId={client.id} />
       </div>
 
       {confirming && (

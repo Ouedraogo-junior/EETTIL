@@ -28,6 +28,7 @@ class DossierController
             ->search($request->query('q'))
             ->when($request->query('status'), fn ($q, $status) => $q->where('status', $status))
             ->when($request->query('service'), fn ($q, $service) => $q->withService($service))
+            ->when($request->query('client_id'), fn ($q, $id) => $q->where('client_id', $id))
             ->orderByDesc('opened_on')
             ->orderByDesc('id')
             ->paginate($perPage);

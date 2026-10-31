@@ -5,6 +5,7 @@ import type { Client, ClientInput } from './types'
 export interface ClientListParams {
   q?: string
   page?: number
+  per_page?: number
 }
 
 const base = '/api/v1/clients'

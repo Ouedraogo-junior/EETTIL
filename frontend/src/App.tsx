@@ -7,6 +7,9 @@ import DashboardPage from '@/modules/dashboard/DashboardPage'
 import ClientDetailPage from '@/modules/clients/ClientDetailPage'
 import ClientFormPage from '@/modules/clients/ClientFormPage'
 import ClientsListPage from '@/modules/clients/ClientsListPage'
+import DossierDetailPage from '@/modules/dossiers/DossierDetailPage'
+import DossierFormPage from '@/modules/dossiers/DossierFormPage'
+import DossiersListPage from '@/modules/dossiers/DossiersListPage'
 
 export default function App() {
   return (
@@ -23,7 +26,12 @@ export default function App() {
             <Route path=":id" element={<ClientDetailPage />} />
             <Route path=":id/modifier" element={<ClientFormPage />} />
           </Route>
-          <Route path="dossiers" element={<ComingSoon title="Dossiers" step={3} />} />
+          <Route path="dossiers">
+            <Route index element={<DossiersListPage />} />
+            <Route path="nouveau" element={<DossierFormPage />} />
+            <Route path=":id" element={<DossierDetailPage />} />
+            <Route path=":id/modifier" element={<DossierFormPage />} />
+          </Route>
           <Route path="suivi" element={<ComingSoon title="Suivi transit" step={3} />} />
           <Route path="factures" element={<ComingSoon title="Factures" step={4} />} />
           <Route path="paiements" element={<ComingSoon title="Paiements" step={5} />} />

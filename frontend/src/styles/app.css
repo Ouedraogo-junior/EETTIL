@@ -293,3 +293,26 @@ table.data.tight td{white-space:nowrap}
 table.data td a.name{color:var(--ink);font-weight:700;text-decoration:none}
 table.data td a.name:hover{text-decoration:underline}
 .backlink{display:inline-flex;margin-bottom:10px}
+
+/* ---------- Étape 3 : dossiers et suivi ---------- */
+.tabs{overflow-x:auto;white-space:nowrap}
+.checks{display:flex;flex-wrap:wrap;gap:6px 22px}
+.check{display:flex;align-items:center;gap:8px;min-height:36px;cursor:pointer}
+.check input{width:18px;height:18px}
+.picked{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #C9D1DF;border-radius:6px;padding:6px 6px 6px 12px;background:#fff}
+.picker{list-style:none;margin:6px 0 0;padding:0;border:1px solid var(--line);border-radius:6px;max-height:260px;overflow:auto;background:#fff}
+.picker li{padding:10px 12px;color:var(--muted)}
+.picker li:has(button){padding:0}
+.picker button{display:block;width:100%;text-align:left;padding:11px 12px;border:0;border-bottom:1px solid var(--line-2);background:none;cursor:pointer}
+.picker li:last-child button{border-bottom:0}
+.picker button:hover,.picker button:focus-visible{background:#F6F8FD}
+@media(max-width:600px){.meta{grid-template-columns:1fr}}
+@media(max-width:700px){
+  /* Les formulaires longs s'ouvrent en plein écran sur téléphone, et défilent avec la page */
+  .overlay.sheet{display:block;padding:0;background:#fff}
+  .overlay.sheet .modal{max-width:none;min-height:100%;border-radius:0;box-shadow:none;display:flex;flex-direction:column}
+  .overlay.sheet .modal>.hd{position:sticky;top:0;z-index:2;background:#fff}
+  .overlay.sheet .modal>.bd{flex:1}
+  .overlay.sheet .modal>.ft{position:sticky;bottom:0;border-radius:0}
+  .overlay,.scrim{top:0;right:0;bottom:0;left:0}
+}
