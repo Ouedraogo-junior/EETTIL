@@ -16,5 +16,7 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(['login' => 'gerant'], [
             'name' => 'Gérant EETTIL', 'role' => Role::Gerant, 'active' => true, 'password' => 'gerant1234',
         ]);
+
+        $this->call(ClientSeeder::class);
     }
 }
