@@ -285,3 +285,11 @@ table.data.tight td{white-space:nowrap}
   table.cards td.main::before{content:none}
   table.cards td:empty{display:none}
 }
+
+/* ---------- Étape 2 : liste, pagination, bouton rouge ---------- */
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 18px;border-top:1px solid var(--line-2);color:var(--muted);font-size:13px}
+.pager .btns{display:flex;gap:8px}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff}.btn.red:hover{background:#9A1F18;border-color:#9A1F18}
+table.data td a.name{color:var(--ink);font-weight:700;text-decoration:none}
+table.data td a.name:hover{text-decoration:underline}
+.backlink{display:inline-flex;margin-bottom:10px}

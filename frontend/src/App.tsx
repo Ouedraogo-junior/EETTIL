@@ -4,6 +4,9 @@ import { ComingSoon } from '@/core/ui/ComingSoon'
 import LoginPage from '@/modules/auth/LoginPage'
 import { RequireAuth, RequireRole } from '@/modules/auth/RequireAuth'
 import DashboardPage from '@/modules/dashboard/DashboardPage'
+import ClientDetailPage from '@/modules/clients/ClientDetailPage'
+import ClientFormPage from '@/modules/clients/ClientFormPage'
+import ClientsListPage from '@/modules/clients/ClientsListPage'
 
 export default function App() {
   return (
@@ -14,7 +17,12 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route index element={<Navigate to="/tableau-de-bord" replace />} />
           <Route path="tableau-de-bord" element={<DashboardPage />} />
-          <Route path="clients" element={<ComingSoon title="Clients" step={2} />} />
+          <Route path="clients">
+            <Route index element={<ClientsListPage />} />
+            <Route path="nouveau" element={<ClientFormPage />} />
+            <Route path=":id" element={<ClientDetailPage />} />
+            <Route path=":id/modifier" element={<ClientFormPage />} />
+          </Route>
           <Route path="dossiers" element={<ComingSoon title="Dossiers" step={3} />} />
           <Route path="suivi" element={<ComingSoon title="Suivi transit" step={3} />} />
           <Route path="factures" element={<ComingSoon title="Factures" step={4} />} />

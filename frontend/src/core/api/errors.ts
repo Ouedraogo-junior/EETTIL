@@ -15,3 +15,14 @@ export function apiError(e: unknown, fallback = 'Une erreur est survenue. Réess
   }
   return fallback
 }
+
+/** Erreurs de validation (422) champ par champ : { ifu: "Cette valeur existe déjà." } ou null. */
+export function fieldErrors(e: unknown): Record<string, string> | null {
+  if (axios.isAxiosError(e) && e.response?.status === 422) {
+    const errors = (e.response.data as ApiErrorBody | undefined)?.errors
+    if (errors) {
+      return Object.fromEntries(Object.entries(errors).map(([field, msgs]) => [field, msgs[0]]))
+    }
+  }
+  return null
+}
