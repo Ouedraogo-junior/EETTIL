@@ -41,7 +41,10 @@ class ClientController
 
     public function destroy(Client $client): Response
     {
-        // Étape 3 : on refusera la suppression si le client a des dossiers.
+        if ($client->dossiers()->exists()) {
+            abort(409, 'Ce client a des dossiers : il ne peut pas être supprimé.');
+        }
+
         $client->delete();
 
         return response()->noContent();
