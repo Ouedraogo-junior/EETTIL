@@ -7,6 +7,8 @@ use App\Modules\Dossiers\Models\Dossier;
 use Database\Seeders\LineTemplateSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Modules\Facturation\Models\Document;
+use App\Modules\Facturation\Pdf\DocumentPdf;
 
 class DocumentTest extends TestCase
 {
@@ -343,5 +345,51 @@ class DocumentTest extends TestCase
         $this->postJson("/api/v1/dossiers/{$dossier->id}/documents", $this->payload())->assertCreated();
 
         $this->deleteJson("/api/v1/dossiers/{$dossier->id}")->assertStatus(409);
+    }
+
+    public function test_donnees_du_pdf_sur_la_facture_modele_du_client(): void
+    {
+        $dossier = Dossier::factory()->create();
+        $this->login();
+        $id = $this->postJson("/api/v1/dossiers/{$dossier->id}/documents", $this->payload())->json('data.id');
+
+        $document = Document::with(['lines', 'dossier.client', 'dossier.tracking'])->findOrFail($id);
+        $d = app(DocumentPdf::class)->data($document);
+
+        $this->assertSame('FACTURE', $d['title']);
+        $this->assertSame('A. DÉBOURS', $d['debours_title']);
+        $this->assertCount(4, $d['debours']);
+        $this->assertCount(4, $d['prestations']);
+        $this->assertSame("13\u{00A0}793\u{00A0}669\u{00A0}XOF", $d['debours_total']);
+        $this->assertSame("15\u{00A0}069\u{00A0}669\u{00A0}XOF", $d['grand']);
+        $this->assertSame('QUINZE MILLIONS SOIXANTE NEUF MILLE SIX CENT SOIXANTE NEUF FRANCS CFA', $d['words']);
+    }
+
+    public function test_une_quotation_s_imprime_comme_quotation(): void
+    {
+        $dossier = Dossier::factory()->create();
+        $this->login();
+        $id = $this->postJson("/api/v1/dossiers/{$dossier->id}/documents", $this->payload(['type' => 'proforma']))->json('data.id');
+
+        $document = Document::with(['lines', 'dossier.client', 'dossier.tracking'])->findOrFail($id);
+        $d = app(DocumentPdf::class)->data($document);
+
+        $this->assertSame('QUOTATION', $d['title']);
+        $this->assertSame('MONTANT TOTAL DE LA QUOTATION (XOF)', $d['grand_label']);
+        $this->assertStringStartsWith('QUO/', $d['number']);
+        $this->assertSame('FCT-'.now()->year.'-000-001.pdf', str_replace('QUO', 'FCT', explode(' - ', DocumentPdf::filename($document))[0]).'.pdf');
+    }
+
+    public function test_le_pdf_est_envoye_avec_le_bon_nom_de_fichier(): void
+    {
+        $dossier = Dossier::factory()->create();
+        $this->login();
+        $id = $this->postJson("/api/v1/dossiers/{$dossier->id}/documents", $this->payload())->json('data.id');
+
+        $response = $this->get("/api/v1/documents/{$id}/pdf");
+
+        $response->assertOk()->assertHeader('Content-Type', 'application/pdf');
+        $this->assertStringStartsWith('%PDF', $response->getContent());
+        $this->assertStringContainsString('FCT-'.now()->year.'-000-001', $response->headers->get('Content-Disposition'));
     }
 }

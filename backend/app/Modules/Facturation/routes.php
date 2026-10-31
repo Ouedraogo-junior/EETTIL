@@ -10,6 +10,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('dossiers/{dossier}/documents', [DocumentController::class, 'index']);
     Route::post('dossiers/{dossier}/documents', [DocumentController::class, 'store']);
+    Route::get('documents/{document}/pdf', [DocumentController::class, 'pdf']);
 
     Route::get('documents/{document}', [DocumentController::class, 'show']);
     Route::put('documents/{document}', [DocumentController::class, 'update']);

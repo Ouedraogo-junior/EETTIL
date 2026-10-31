@@ -12,3 +12,9 @@ export const STATE_LABEL: Record<DocumentState, string> = {
   annule: 'Annulée',
   transforme: 'Transformée en facture',
 }
+
+/** Nom du fichier PDF : « FCT-2026-000-011 - Nom du client.pdf ». */
+export function pdfFileName(number: string, clientName?: string): string {
+  const base = number.replace(/\//g, '-') + (clientName ? ` - ${clientName}` : '')
+  return base.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim() + '.pdf'
+}

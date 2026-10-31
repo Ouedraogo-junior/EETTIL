@@ -15,6 +15,9 @@ use App\Modules\Facturation\Models\LineTemplate;
 use App\Support\Settings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Modules\Facturation\Pdf\DocumentPdf;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 
 class DocumentController
 {
@@ -102,5 +105,21 @@ class DocumentController
             ->paginate($perPage);
 
         return DocumentResource::collection($documents);
+    }
+
+    /** PDF du document sur le modèle du client. */
+    public function pdf(Document $document, DocumentPdf $pdf)
+    {
+        $document->load(self::RELATIONS);
+        $name = DocumentPdf::filename($document);
+
+        return response($pdf->render($document), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => HeaderUtils::makeDisposition(
+                HeaderUtils::DISPOSITION_ATTACHMENT,
+                $name,
+                Str::ascii(str_replace('%', '', $name)),
+            ),
+        ]);
     }
 }

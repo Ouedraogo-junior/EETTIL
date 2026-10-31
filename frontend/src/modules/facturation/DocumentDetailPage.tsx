@@ -8,9 +8,11 @@ import { useToast } from '@/core/ui/toast-context'
 import { DocStateBadge } from './badges'
 import { CancelDocumentModal } from './CancelDocumentModal'
 import { useConvertDocument, useDocument } from './hooks'
-import { docLabel } from './labels'
 import { TotalsBox } from './TotalsBox'
 import type { DocumentLine } from './types'
+import { downloadFile } from '@/core/api/download'
+import { fetchDocumentPdf } from './api'
+import { docLabel, pdfFileName } from './labels'
 
 function BlockTable({ title, lines, discounts }: { title: string; lines: DocumentLine[]; discounts: boolean }) {
   if (!lines.length) return null
@@ -63,6 +65,7 @@ export default function DocumentDetailPage() {
   const toast = useToast()
   const { data: doc, isPending, isError, error } = useDocument(id)
   const convert = useConvertDocument()
+  const [pdfBusy, setPdfBusy] = useState(false)
   const [converting, setConverting] = useState(false)
   const [cancelling, setCancelling] = useState(false)
 
@@ -90,6 +93,36 @@ export default function DocumentDetailPage() {
   const client = dossier?.client
   const discountNote =
     doc.global_discount.kind === 'pct' ? `${formatNumber(doc.global_discount.value)} %` : undefined
+
+  const pdfName = pdfFileName(doc.number, client?.name)
+
+  const onDownloadPdf = async () => {
+    setPdfBusy(true)
+    try {
+      await downloadFile(`/api/v1/documents/${doc.id}/pdf`, {}, pdfName)
+    } catch {
+      toast('Le PDF n’a pas pu être généré.', 'bad')
+    } finally {
+      setPdfBusy(false)
+    }
+  }
+
+  const onPreviewPdf = async () => {
+    const win = window.open('', '_blank') // ouvert tout de suite, sinon le navigateur bloque la fenêtre
+    if (!win) return onDownloadPdf()
+    setPdfBusy(true)
+    try {
+      const blob = await fetchDocumentPdf(doc.id)
+      const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }))
+      win.location.href = url
+      setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    } catch {
+      win.close()
+      toast('Le PDF n’a pas pu être généré.', 'bad')
+    } finally {
+      setPdfBusy(false)
+    }
+  }
 
   const onConvert = async () => {
     try {
@@ -121,6 +154,13 @@ export default function DocumentDetailPage() {
         </div>
         <div className="grow" />
         <div className="acts">
+          <button className="btn" onClick={onPreviewPdf} disabled={pdfBusy}>
+            Aperçu
+          </button>
+          <button className="btn" onClick={onDownloadPdf} disabled={pdfBusy}>
+            {pdfBusy ? 'PDF…' : 'Télécharger le PDF'}
+          </button>
+          
           {doc.type === 'proforma' && doc.state === 'emis' && (
             <button className="btn primary" onClick={() => setConverting(true)}>
               Transformer en facture

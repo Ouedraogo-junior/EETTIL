@@ -54,3 +54,8 @@ export async function getDocumentOptions(): Promise<DocumentOptions> {
   const { data } = await http.get<{ data: DocumentOptions }>('/api/v1/documents/options')
   return data.data
 }
+
+export async function fetchDocumentPdf(id: number): Promise<Blob> {
+  const res = await http.get<Blob>(`/api/v1/documents/${id}/pdf`, { responseType: 'blob' })
+  return res.data
+}
