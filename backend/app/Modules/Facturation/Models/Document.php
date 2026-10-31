@@ -39,7 +39,7 @@ class Document extends Model
 
     public function dossier(): BelongsTo
     {
-        return $this->belongsTo(Dossier::class);
+        return $this->belongsTo(Dossier::class)->withTrashed();
     }
 
     public function lines(): HasMany

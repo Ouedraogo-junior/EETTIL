@@ -7,7 +7,7 @@ use App\Modules\Facturation\Enums\DocumentType;
 use App\Modules\Facturation\Models\Document;
 use Illuminate\Validation\ValidationException;
 
-/** Transforme une proforma en facture : mêmes lignes, remises et informations d'en-tête, nouveau numéro de facture. */
+/** Transforme une quotation en facture : mêmes lignes, remises et informations d'en-tête, nouveau numéro de facture. */
 class ConvertProforma
 {
     public function __construct(private SaveDocument $save) {}
@@ -15,10 +15,10 @@ class ConvertProforma
     public function handle(Document $proforma, ?int $userId): Document
     {
         if ($proforma->type !== DocumentType::Proforma) {
-            throw ValidationException::withMessages(['document' => 'Seule une proforma peut être transformée en facture.']);
+            throw ValidationException::withMessages(['document' => 'Seule une quotation peut être transformée en facture.']);
         }
         if ($proforma->state !== DocumentState::Emis) {
-            throw ValidationException::withMessages(['document' => 'Cette proforma ne peut plus être transformée en facture.']);
+            throw ValidationException::withMessages(['document' => 'Cette quotation ne peut plus être transformée en facture.']);
         }
 
         $data = [

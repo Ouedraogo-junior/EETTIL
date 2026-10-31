@@ -10,7 +10,7 @@ enum DocumentType: string
     public function label(): string
     {
         return match ($this) {
-            self::Proforma => 'Proforma',
+            self::Proforma => 'Quotation',
             self::Facture => 'Facture',
         };
     }

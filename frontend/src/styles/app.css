@@ -322,3 +322,38 @@ table.data td a.name:hover{text-decoration:underline}
   table.data.tight.cards td{padding:3px 0;white-space:normal}
   table.cards td.hide-sm{display:none}
 }
+
+/* ---------- Étape 4C : documents (factures et quotations) ---------- */
+.dlines{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.dline{display:grid;grid-template-columns:minmax(0,3fr) 84px 76px minmax(0,1.3fr) minmax(0,1.7fr) 170px;gap:8px;align-items:start;padding:10px;border:1px solid var(--line-2);border-radius:8px;background:#fff}
+.dline.d{grid-template-columns:minmax(0,3fr) 84px 76px minmax(0,1.3fr) 170px}
+.dline label{display:block;font-size:11px;color:var(--muted);margin-bottom:3px}
+.dline .inp,.dline .sel{width:100%}
+.dline .end{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:20px}
+.dline .tot{font-weight:700;white-space:nowrap}
+.dline .errmsg,.dline .warn{grid-column:1/-1;margin:0}
+.disc{display:flex;gap:6px}
+.disc .sel{width:92px;flex:none}
+.dblock-hd h2{margin:0;font-size:15px}
+.dblock-hd .sub{color:var(--muted);font-size:13px;margin-top:2px}
+.dadd{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.dadd .sel{width:auto;max-width:100%}
+.dsum{max-width:520px;margin-left:auto}
+.dsum .r{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line-2)}
+.dsum .r.big{font-size:18px;font-weight:700;border-bottom:0;padding-top:12px}
+.dsum .words{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
+.dbar{position:sticky;bottom:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 12px rgba(16,24,40,.06)}
+.dbar .l{font-size:12px;color:var(--muted)}
+.dbar b{font-size:18px}
+details.more>summary{cursor:pointer;font-weight:600;padding:12px 18px;list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:'▸ '}
+details.more[open]>summary::before{content:'▾ '}
+details.more .bd{padding-top:0}
+.cancelled{border-left:4px solid var(--red)}
+@media(max-width:900px){
+  .dline,.dline.d{grid-template-columns:1fr 1fr}
+  .dline .f-label,.dline .f-disc{grid-column:1/-1}
+  .dline .end{grid-column:1/-1;padding-top:4px}
+  .dsum{max-width:none}
+}

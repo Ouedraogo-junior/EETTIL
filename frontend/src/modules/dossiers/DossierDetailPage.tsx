@@ -10,6 +10,7 @@ import { TrackingTab } from '@/modules/suivi/TrackingTab'
 import { StatusBadge } from './badges'
 import { useChangeStatus, useDeleteDossier, useDossier, useDossierOptions } from './hooks'
 import type { DossierStatus } from './types'
+import { DocumentsTab } from '@/modules/facturation/DocumentsTab'
 
 const TABS = [
   ['documents', 'Documents'],
@@ -165,6 +166,8 @@ export default function DossierDetailPage() {
           </div>
           {tab === 'suivi' ? (
             <TrackingTab dossier={dossier} />
+          ) : tab === 'documents' ? (
+            <DocumentsTab dossier={dossier} />
           ) : (
             <div className="empty">
               <b>Bientôt disponible</b>

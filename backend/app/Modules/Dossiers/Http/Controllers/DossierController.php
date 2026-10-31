@@ -64,6 +64,10 @@ class DossierController
 
     public function destroy(Dossier $dossier): Response
     {
+        if ($dossier->documents()->exists()) {
+            abort(409, 'Ce dossier a des documents. Annulez-les, ou passez le dossier au statut « Annulée », plutôt que de le supprimer.');
+        }
+        
         $dossier->delete();
 
         return response()->noContent();

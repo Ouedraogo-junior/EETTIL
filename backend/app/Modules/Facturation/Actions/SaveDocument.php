@@ -127,12 +127,12 @@ class SaveDocument
             return null;
         }
         if ($type !== DocumentType::Facture) {
-            throw ValidationException::withMessages(['from_proforma_id' => 'Seule une facture peut être créée à partir d’une proforma.']);
+            throw ValidationException::withMessages(['from_proforma_id' => 'Seule une facture peut être créée à partir d’une quotation.']);
         }
 
         $source = Document::query()->lockForUpdate()->find($proformaId);
         if (! $source || $source->dossier_id !== $dossier->id || $source->type !== DocumentType::Proforma || $source->state !== DocumentState::Emis) {
-            throw ValidationException::withMessages(['from_proforma_id' => 'Cette proforma ne peut pas être transformée en facture.']);
+            throw ValidationException::withMessages(['from_proforma_id' => 'Cette quotation ne peut pas être transformée en facture.']);
         }
 
         return $source;

@@ -9,7 +9,7 @@ return [
         'vat_rate' => 18,
         'series' => '000',
         'invoice_prefix' => 'FCT',
-        'proforma_prefix' => 'PRO',
+        'proforma_prefix' => 'QUO',
         'company_ifu' => '00253875E',
         'company_rccm' => 'BF-OUA-01-2024-B13-17299',
         'bank_name' => 'UBA BURKINA',

@@ -80,4 +80,27 @@ class DocumentController
             ],
         ]]);
     }
+
+    /** Liste de tous les documents, avec recherche (numéro, dossier, client) et filtres. */
+    public function list(Request $request)
+    {
+        $perPage = min(max((int) $request->query('per_page', 15), 1), 100);
+
+        $documents = Document::query()
+            ->with(['dossier.client'])
+            ->when($request->query('type'), fn ($q, $t) => $q->where('type', $t))
+            ->when($request->query('state'), fn ($q, $s) => $q->where('state', $s))
+            ->when($request->query('q'), function ($q, $term) {
+                $like = '%'.str_replace(['%', '_'], ['\%', '\_'], trim($term)).'%';
+                $q->where(fn ($w) => $w
+                    ->where('number', 'like', $like)
+                    ->orWhereHas('dossier', fn ($d) => $d
+                        ->where('number', 'like', $like)
+                        ->orWhereHas('client', fn ($c) => $c->where('name', 'like', $like))));
+            })
+            ->orderByDesc('issued_on')->orderByDesc('id')
+            ->paginate($perPage);
+
+        return DocumentResource::collection($documents);
+    }
 }

@@ -71,8 +71,8 @@ class DocumentTest extends TestCase
         $this->login();
         $url = "/api/v1/dossiers/{$dossier->id}/documents";
 
-        $this->postJson($url, $this->payload(['type' => 'proforma']))->assertCreated()->assertJsonPath('data.number', "PRO/{$year}-000-001");
-        $this->postJson($url, $this->payload(['type' => 'proforma']))->assertCreated()->assertJsonPath('data.number', "PRO/{$year}-000-002");
+        $this->postJson($url, $this->payload(['type' => 'proforma']))->assertCreated()->assertJsonPath('data.number', "QUO/{$year}-000-001");
+        $this->postJson($url, $this->payload(['type' => 'proforma']))->assertCreated()->assertJsonPath('data.number', "QUO/{$year}-000-002");
         $this->postJson($url, $this->payload())->assertCreated()->assertJsonPath('data.number', "FCT/{$year}-000-001");
 
         // Une proforma n'a aucun effet sur le statut du dossier
@@ -101,11 +101,11 @@ class DocumentTest extends TestCase
         $url = "/api/v1/dossiers/{$dossier->id}/documents";
 
         $this->postJson($url, $this->payload(['type' => 'proforma', 'issued_on' => '2025-12-30']))
-            ->assertCreated()->assertJsonPath('data.number', 'PRO/2025-000-001');
+            ->assertCreated()->assertJsonPath('data.number', 'QUO/2025-000-001');
         $this->postJson($url, $this->payload(['type' => 'proforma', 'issued_on' => '2026-01-05']))
-            ->assertCreated()->assertJsonPath('data.number', 'PRO/2026-000-001');
+            ->assertCreated()->assertJsonPath('data.number', 'QUO/2026-000-001');
         $this->postJson($url, $this->payload(['type' => 'proforma', 'issued_on' => '2025-12-31']))
-            ->assertCreated()->assertJsonPath('data.number', 'PRO/2025-000-002');
+            ->assertCreated()->assertJsonPath('data.number', 'QUO/2025-000-002');
     }
 
     public function test_validation_des_champs(): void
@@ -320,5 +320,28 @@ class DocumentTest extends TestCase
     {
         $this->getJson('/api/v1/documents/options')->assertUnauthorized();
         $this->postJson('/api/v1/documents/preview', ['lines' => []])->assertUnauthorized();
+    }
+
+    public function test_liste_globale_avec_recherche_et_filtres(): void
+    {
+        $a = Dossier::factory()->create();
+        $b = Dossier::factory()->create();
+        $this->login();
+        $this->postJson("/api/v1/dossiers/{$a->id}/documents", $this->payload())->assertCreated();
+        $this->postJson("/api/v1/dossiers/{$b->id}/documents", $this->payload(['type' => 'proforma']))->assertCreated();
+
+        $this->getJson('/api/v1/documents')->assertOk()->assertJsonCount(2, 'data')->assertJsonPath('meta.total', 2);
+        $this->getJson('/api/v1/documents?type=proforma')->assertOk()->assertJsonCount(1, 'data');
+        $this->getJson('/api/v1/documents?state=annule')->assertOk()->assertJsonCount(0, 'data');
+        $this->getJson('/api/v1/documents?q='.urlencode($a->number))->assertOk()->assertJsonCount(1, 'data');
+    }
+
+    public function test_un_dossier_avec_documents_ne_se_supprime_pas(): void
+    {
+        $dossier = Dossier::factory()->create();
+        $this->actingAs(User::factory()->create(['role' => 'admin']));
+        $this->postJson("/api/v1/dossiers/{$dossier->id}/documents", $this->payload())->assertCreated();
+
+        $this->deleteJson("/api/v1/dossiers/{$dossier->id}")->assertStatus(409);
     }
 }

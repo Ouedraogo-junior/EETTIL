@@ -11,6 +11,9 @@ import DossierDetailPage from '@/modules/dossiers/DossierDetailPage'
 import DossierFormPage from '@/modules/dossiers/DossierFormPage'
 import DossiersListPage from '@/modules/dossiers/DossiersListPage'
 import SuiviPage from '@/modules/suivi/SuiviPage'
+import DocumentDetailPage from '@/modules/facturation/DocumentDetailPage'
+import DocumentEditorPage from '@/modules/facturation/DocumentEditorPage'
+import DocumentsListPage from '@/modules/facturation/DocumentsListPage'
 
 export default function App() {
   return (
@@ -21,20 +24,27 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route index element={<Navigate to="/tableau-de-bord" replace />} />
           <Route path="tableau-de-bord" element={<DashboardPage />} />
+          
           <Route path="clients">
             <Route index element={<ClientsListPage />} />
             <Route path="nouveau" element={<ClientFormPage />} />
             <Route path=":id" element={<ClientDetailPage />} />
             <Route path=":id/modifier" element={<ClientFormPage />} />
           </Route>
+
           <Route path="dossiers">
             <Route index element={<DossiersListPage />} />
             <Route path="nouveau" element={<DossierFormPage />} />
             <Route path=":id" element={<DossierDetailPage />} />
             <Route path=":id/modifier" element={<DossierFormPage />} />
           </Route>
+
           <Route path="suivi" element={<SuiviPage />} />
-          <Route path="factures" element={<ComingSoon title="Factures" step={4} />} />
+          <Route path="factures" element={<DocumentsListPage />} />
+          <Route path="documents/:id" element={<DocumentDetailPage />} />
+          <Route path="documents/:id/modifier" element={<DocumentEditorPage />} />
+          <Route path="dossiers/:dossierId/documents/nouveau" element={<DocumentEditorPage />} />
+
           <Route path="paiements" element={<ComingSoon title="Paiements" step={5} />} />
           <Route path="tresorerie" element={<ComingSoon title="Trésorerie" step={5} />} />
           <Route path="depenses" element={<ComingSoon title="Dépenses" step={6} />} />

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('documents/options', [DocumentController::class, 'options']);
     Route::post('documents/preview', [DocumentController::class, 'preview']);
+    Route::get('documents', [DocumentController::class, 'list']);
 
     Route::get('dossiers/{dossier}/documents', [DocumentController::class, 'index']);
     Route::post('dossiers/{dossier}/documents', [DocumentController::class, 'store']);
