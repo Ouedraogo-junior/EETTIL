@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Modules\Facturation\Models\Document;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Dossier extends Model
 {
@@ -37,6 +39,11 @@ class Dossier extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class)->withTrashed();
+    }
+    
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
     }
 
     public function tracking(): HasOne

@@ -18,4 +18,10 @@ class Counter
             return $value;
         });
     }
+
+    /** Fixe la dernière valeur utilisée : le prochain numéro sera $value + 1. */
+    public static function set(string $name, int $value): void
+    {
+        DB::table('counters')->updateOrInsert(['name' => $name], ['value' => $value]);
+    }
 }

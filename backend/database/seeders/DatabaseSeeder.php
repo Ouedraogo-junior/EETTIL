@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ClientSeeder::class);
         $this->call(DossierSeeder::class);
+        $this->call(LineTemplateSeeder::class);
     }
 }
