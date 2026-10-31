@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import logo from '@/assets/logo.jpg'
 import { Icon } from '@/core/ui/Icon'
@@ -9,17 +9,19 @@ export default function AppLayout() {
   const { data: user } = useMe()
   const logout = useLogout()
   const { pathname } = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const items = NAV_ITEMS.filter((i) => !i.adminOnly || user?.role === 'admin')
   const current = NAV_ITEMS.find((i) => pathname.startsWith(i.to))
+  const closeMenu = () => setMenuOpen(false)
 
   return (
-    <div className="app">
-      <aside className="side">
+    <div className={'app' + (menuOpen ? ' menu-open' : '')}>
+      <aside className="side" id="menu">
         <div className="logo-card">
           <img src={logo} alt="EETTIL" />
         </div>
-        <nav className="nav" aria-label="Navigation principale">
+        <nav className="nav" aria-label="Navigation principale" onClick={closeMenu}>
           {items.map((item) => (
             <Fragment key={item.to}>
               {item.adminOnly && <div className="sep" />}
@@ -35,14 +37,24 @@ export default function AppLayout() {
           {user?.role_label}
         </div>
       </aside>
+      <div className="scrim" onClick={closeMenu} />
 
       <div className="main">
         <header className="top">
+          <button
+            className="burger"
+            aria-label="Ouvrir le menu"
+            aria-controls="menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(true)}
+          >
+            <Icon name="menu" />
+          </button>
           <div className="crumb">{current?.label ?? ''}</div>
           <div className="grow" />
           <button className="btn sm" onClick={() => logout.mutate()} disabled={logout.isPending}>
             <Icon name="logout" />
-            Déconnexion
+            <span className="hide-sm">Déconnexion</span>
           </button>
         </header>
         <main className="page">

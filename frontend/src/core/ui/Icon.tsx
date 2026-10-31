@@ -11,6 +11,7 @@ const ICONS = {
   admin: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   logout: '<path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 16l-4-4 4-4M6 12h10"/>',
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
 } as const
 
 export type IconName = keyof typeof ICONS
