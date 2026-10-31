@@ -316,3 +316,9 @@ table.data td a.name:hover{text-decoration:underline}
   .overlay.sheet .modal>.ft{position:sticky;bottom:0;border-radius:0}
   .overlay,.scrim{top:0;right:0;bottom:0;left:0}
 }
+
+/* ---------- Étape 3C : écran de suivi ---------- */
+@media(max-width:700px){
+  table.data.tight.cards td{padding:3px 0;white-space:normal}
+  table.cards td.hide-sm{display:none}
+}

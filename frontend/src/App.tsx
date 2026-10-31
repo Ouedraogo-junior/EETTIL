@@ -10,6 +10,7 @@ import ClientsListPage from '@/modules/clients/ClientsListPage'
 import DossierDetailPage from '@/modules/dossiers/DossierDetailPage'
 import DossierFormPage from '@/modules/dossiers/DossierFormPage'
 import DossiersListPage from '@/modules/dossiers/DossiersListPage'
+import SuiviPage from '@/modules/suivi/SuiviPage'
 
 export default function App() {
   return (
@@ -32,7 +33,7 @@ export default function App() {
             <Route path=":id" element={<DossierDetailPage />} />
             <Route path=":id/modifier" element={<DossierFormPage />} />
           </Route>
-          <Route path="suivi" element={<ComingSoon title="Suivi transit" step={3} />} />
+          <Route path="suivi" element={<SuiviPage />} />
           <Route path="factures" element={<ComingSoon title="Factures" step={4} />} />
           <Route path="paiements" element={<ComingSoon title="Paiements" step={5} />} />
           <Route path="tresorerie" element={<ComingSoon title="Trésorerie" step={5} />} />

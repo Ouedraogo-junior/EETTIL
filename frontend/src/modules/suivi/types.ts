@@ -44,3 +44,16 @@ export type TrackingInput = {
   weight_kg: number
   comments: string
 } & Record<StepKey, string>
+
+import type { DossierStatus } from '@/modules/dossiers/types'
+
+/** Une ligne de l'écran « Suivi des dossiers » : le suivi, avec son dossier et son client. */
+export type SuiviRow = Tracking & {
+  dossier: {
+    id: number
+    number: string
+    status: DossierStatus
+    status_label: string
+    client: { id: number; name: string } | null
+  }
+}
