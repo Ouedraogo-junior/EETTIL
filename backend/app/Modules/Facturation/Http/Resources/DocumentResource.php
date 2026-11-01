@@ -42,6 +42,7 @@ class DocumentResource extends JsonResource
                 'total' => $this->total,
                 'total_in_words' => AmountInWords::forInvoice($this->total),
             ],
+            'payment' => $this->type->value === 'facture' ? $this->paymentSummary() : null,
             'source_document_id' => $this->source_document_id,
             'cancelled_at' => $this->cancelled_at?->toIso8601String(),
             'cancel_reason' => $this->cancel_reason,

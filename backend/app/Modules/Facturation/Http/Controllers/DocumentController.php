@@ -26,7 +26,7 @@ class DocumentController
     /** Documents d'un dossier, du plus récent au plus ancien. */
     public function index(Dossier $dossier)
     {
-        return DocumentResource::collection($dossier->documents()->orderByDesc('id')->get());
+        return DocumentResource::collection($dossier->documents()->withPaid()->orderByDesc('id')->get());
     }
 
     public function show(Document $document): DocumentResource
@@ -89,7 +89,7 @@ class DocumentController
     {
         $perPage = min(max((int) $request->query('per_page', 15), 1), 100);
 
-        $documents = Document::query()
+        $documents = Document::query()->withPaid()
             ->with(['dossier.client'])
             ->when($request->query('type'), fn ($q, $t) => $q->where('type', $t))
             ->when($request->query('state'), fn ($q, $s) => $q->where('state', $s))

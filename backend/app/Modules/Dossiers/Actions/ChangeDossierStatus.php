@@ -5,6 +5,9 @@ namespace App\Modules\Dossiers\Actions;
 use App\Modules\Dossiers\Enums\DossierStatus;
 use App\Modules\Dossiers\Models\Dossier;
 use Illuminate\Validation\ValidationException;
+use App\Modules\Facturation\Enums\DocumentState;
+use App\Modules\Facturation\Enums\DocumentType;
+use App\Modules\Paiements\Models\Payment;
 
 class ChangeDossierStatus
 {
@@ -27,14 +30,18 @@ class ChangeDossierStatus
         return $dossier;
     }
 
-    // À brancher sur les vraies données aux étapes 4 (factures) et 5 (paiements).
     private function invoiceIsSettled(Dossier $dossier): bool
     {
-        return false;
+        $facture = $dossier->documents()
+            ->where('type', DocumentType::Facture->value)
+            ->where('state', DocumentState::Emis->value)
+            ->first();
+
+        return $facture !== null && $facture->paidAmount() >= $facture->total;
     }
 
     private function hasPayments(Dossier $dossier): bool
     {
-        return false;
+        return Payment::query()->where('dossier_id', $dossier->id)->whereNull('cancelled_at')->exists();
     }
 }

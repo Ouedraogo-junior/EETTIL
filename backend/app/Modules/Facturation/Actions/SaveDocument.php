@@ -106,10 +106,10 @@ class SaveDocument
         });
     }
 
-    /** Total des paiements reçus sur ce document. À brancher sur les paiements à l'étape 5. */
+    /** Total des paiements reçus sur ce document. */
     private function paidAmount(Document $document): int
     {
-        return 0;
+        return $document->paidAmount();
     }
 
     private function hasActiveFacture(Dossier $dossier): bool

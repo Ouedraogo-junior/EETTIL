@@ -35,9 +35,8 @@ class CancelDocument
         });
     }
 
-    /** À brancher sur les paiements à l'étape 5. */
     private function hasPayments(Document $document): bool
     {
-        return false;
+        return $document->paidAmount() > 0;
     }
 }
