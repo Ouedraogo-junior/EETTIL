@@ -357,3 +357,31 @@ details.more .bd{padding-top:0}
   .dline .end{grid-column:1/-1;padding-top:4px}
   .dsum{max-width:none}
 }
+
+/* ---------- Étape 5B : paiements et trésorerie ---------- */
+.pay-recap{margin:0 0 16px;display:flex;flex-direction:column;gap:2px}
+.amount-row{display:flex;gap:8px;align-items:center}
+.amount-row .inp{flex:1}
+.amount-row .btn{white-space:nowrap}
+.cancel-note{color:var(--red);font-size:13px;margin-top:2px;font-weight:400}
+.pay-summary{margin-bottom:12px}
+@media(max-width:1000px){.pay-summary>div:last-child{grid-column:1/-1}}
+.invoice-pay{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin:0 0 16px}
+.suggest{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--orange-soft);border:1px solid #F3D48A;border-radius:8px;padding:12px 16px;margin-bottom:16px}
+.suggest .acts{display:flex;gap:8px;flex-wrap:wrap}
+.kpi .v.neg{color:var(--red)}
+.kpi.kpi-total{background:var(--navy);border-color:var(--navy);color:#fff}
+.kpi-total .l,.kpi-total .d{color:#C9D6F5}
+.totals-bar{display:flex;gap:6px 28px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--line-2);background:#FAFBFD;color:var(--muted);font-size:13.5px}
+.totals-bar b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.totals-bar b.in{color:var(--green)}
+.totals-bar b.out{color:var(--red)}
+table.data td.in:not(.strike){color:var(--green)}
+table.data td.out:not(.strike){color:var(--red)}
+.datefilter{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px}
+.datefilter .inp{width:auto;max-width:none}
+@media(max-width:700px){
+  .toolbar .inp,.toolbar .sel{max-width:none;flex:1 1 100%}
+  .toolbar .datefilter{flex:1 1 45%}
+  .toolbar .datefilter .inp{flex:1}
+}

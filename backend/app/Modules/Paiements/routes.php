@@ -10,5 +10,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('payments/{payment}/cancel', [PaymentController::class, 'cancel']);
 
     Route::get('dossiers/{dossier}/payments', [PaymentController::class, 'forDossier']);
+    Route::get('dossiers/{dossier}/invoices', [PaymentController::class, 'invoicesForDossier']);
     Route::post('documents/{document}/payments', [PaymentController::class, 'store']);
 });

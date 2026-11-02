@@ -14,6 +14,8 @@ import SuiviPage from '@/modules/suivi/SuiviPage'
 import DocumentDetailPage from '@/modules/facturation/DocumentDetailPage'
 import DocumentEditorPage from '@/modules/facturation/DocumentEditorPage'
 import DocumentsListPage from '@/modules/facturation/DocumentsListPage'
+import PaymentsPage from '@/modules/paiements/PaymentsPage'
+import TresoreriePage from '@/modules/tresorerie/TresoreriePage'
 
 export default function App() {
   return (
@@ -45,8 +47,9 @@ export default function App() {
           <Route path="documents/:id/modifier" element={<DocumentEditorPage />} />
           <Route path="dossiers/:dossierId/documents/nouveau" element={<DocumentEditorPage />} />
 
-          <Route path="paiements" element={<ComingSoon title="Paiements" step={5} />} />
-          <Route path="tresorerie" element={<ComingSoon title="Trésorerie" step={5} />} />
+          <Route path="paiements" element={<PaymentsPage />} />
+          <Route path="tresorerie" element={<TresoreriePage />} />
+          
           <Route path="depenses" element={<ComingSoon title="Dépenses" step={6} />} />
           <Route path="rapports" element={<ComingSoon title="Rapports" step={6} />} />
 

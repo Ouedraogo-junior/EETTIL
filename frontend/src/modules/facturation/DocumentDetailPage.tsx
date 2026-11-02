@@ -13,6 +13,7 @@ import type { DocumentLine } from './types'
 import { downloadFile } from '@/core/api/download'
 import { fetchDocumentPdf } from './api'
 import { docLabel, pdfFileName } from './labels'
+import { InvoicePaymentBox } from '@/modules/paiements/InvoicePaymentBox'
 
 function BlockTable({ title, lines, discounts }: { title: string; lines: DocumentLine[]; discounts: boolean }) {
   if (!lines.length) return null
@@ -92,7 +93,7 @@ export default function DocumentDetailPage() {
   const dossier = doc.dossier
   const client = dossier?.client
   const discountNote =
-    doc.global_discount.kind === 'pct' ? `${formatNumber(doc.global_discount.value)} %` : undefined
+  doc.global_discount.kind === 'pct' ? `${formatNumber(doc.global_discount.value)} %` : undefined
 
   const pdfName = pdfFileName(doc.number, client?.name)
 
@@ -178,6 +179,8 @@ export default function DocumentDetailPage() {
           )}
         </div>
       </div>
+
+      <InvoicePaymentBox documentId={doc.id} number={doc.number} payment={doc.payment} payable={doc.state === 'emis'} />
 
       <div className="stack">
         {doc.state === 'annule' && (

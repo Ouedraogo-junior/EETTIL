@@ -290,4 +290,22 @@ class PaymentTest extends TestCase
         $this->getJson('/api/v1/payments')->assertUnauthorized();
         $this->getJson('/api/v1/payments/receivable')->assertUnauthorized();
     }
+
+    public function test_factures_du_dossier_avec_leur_reste(): void
+    {
+        $this->login();
+        $dossier = Dossier::factory()->create();
+        $this->facture($dossier, 300_000, 'proforma');
+        $id = $this->facture($dossier);
+        $this->pay($id)->assertCreated();
+
+        $this->getJson("/api/v1/dossiers/{$dossier->id}/invoices")
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.id', $id)
+            ->assertJsonPath('data.0.total', 1_000_000)
+            ->assertJsonPath('data.0.payment.paid', 400_000)
+            ->assertJsonPath('data.0.payment.rest', 600_000)
+            ->assertJsonPath('data.0.dossier.client.name', $dossier->client->name);
+    }
 }

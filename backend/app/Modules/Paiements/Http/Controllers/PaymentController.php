@@ -5,7 +5,7 @@ namespace App\Modules\Paiements\Http\Controllers;
 use App\Modules\Dossiers\Models\Dossier;
 use App\Modules\Facturation\Enums\DocumentState;
 use App\Modules\Facturation\Enums\DocumentType;
-use App\Modules\Facturation\Http\Resources\DocumentResource;
+use App\Modules\Paiements\Http\Resources\InvoiceSummaryResource;
 use App\Modules\Facturation\Models\Document;
 use App\Modules\Paiements\Actions\CancelPayment;
 use App\Modules\Paiements\Actions\RecordPayment;
@@ -51,6 +51,21 @@ class PaymentController
         );
     }
 
+    /** Factures émises d'un dossier, avec ce qui est payé et ce qui reste. */
+    public function invoicesForDossier(Dossier $dossier)
+    {
+        return InvoiceSummaryResource::collection(
+            Document::query()
+                ->withPaid()
+                ->with('dossier.client')
+                ->where('dossier_id', $dossier->id)
+                ->where('type', DocumentType::Facture->value)
+                ->where('state', DocumentState::Emis->value)
+                ->orderBy('id')
+                ->get()
+        );
+    }
+
     /** Factures émises qui ont un reste à payer, les plus grosses d'abord. */
     public function receivable()
     {
@@ -66,7 +81,7 @@ class PaymentController
             ->sortByDesc(fn (Document $d) => $d->total - $d->paidAmount())
             ->values();
 
-        return DocumentResource::collection($documents)->additional([
+        return InvoiceSummaryResource::collection($documents)->additional([
             'total_rest' => (int) $documents->sum(fn (Document $d) => $d->total - $d->paidAmount()),
         ]);
     }

@@ -8,6 +8,7 @@ import { listSuivi, type SuiviParams } from './api'
 
 function cacheTracking(qc: QueryClient, dossierId: number, tracking: Tracking) {
   qc.setQueryData<Dossier>(dossierKeys.detail(String(dossierId)), (d) => (d ? { ...d, tracking } : d))
+  qc.invalidateQueries({ queryKey: dossierKeys.detail(String(dossierId)) }) // le statut a pu passer à « En cours »
   qc.invalidateQueries({ queryKey: dossierKeys.lists })
   qc.invalidateQueries({ queryKey: ['suivi'] })
 }

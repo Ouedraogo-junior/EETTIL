@@ -2,6 +2,7 @@ export type DocumentType = 'proforma' | 'facture'
 export type DocumentState = 'emis' | 'annule' | 'transforme'
 export type Block = 'D' | 'P'
 export type DiscountKind = 'pct' | 'amt'
+import type { PaymentSummary } from '@/modules/paiements/types'
 
 export interface DocumentLine {
   id: number
@@ -57,6 +58,7 @@ export interface BillingDocument {
   cancel_reason: string | null
   lines?: DocumentLine[]
   dossier?: DocumentDossier
+  payment: PaymentSummary | null // renvoyé par l'API pour une facture, null pour une quotation
 }
 
 export interface LineInput {

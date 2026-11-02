@@ -5,6 +5,7 @@ import { useToast } from '@/core/ui/toast-context'
 import type { Dossier } from '@/modules/dossiers/types'
 import { useActivateTracking } from './hooks'
 import { TrackingForm } from './TrackingForm'
+import { DeliveredSuggestion } from './DeliveredSuggestion'
 
 function Dash({ children }: { children?: ReactNode }) {
   return children ? <>{children}</> : <span className="faint">–</span>
@@ -55,6 +56,7 @@ export function TrackingTab({ dossier }: { dossier: Dossier }) {
 
   return (
     <div className="tbody">
+      <DeliveredSuggestion dossier={dossier} />
       <div className="trow">
         <div>
           <b>{headline}</b>

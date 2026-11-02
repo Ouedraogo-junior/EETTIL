@@ -20,3 +20,12 @@ export function todayISO(): string {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
+
+/** 1250000 -> « 1 250 000 FCFA ». */
+export const formatFcfa = (n: number) => `${formatNumber(n)}\u00a0FCFA`
+
+/** Lit un montant saisi à la main : « 1 250 000 » ou « 1250000 » -> 1250000. Renvoie null si ce n'est pas un entier. */
+export function parseAmount(value: string): number | null {
+  const clean = value.replace(/[\s\u00a0\u202f]/g, '')
+  return /^\d+$/.test(clean) ? Number(clean) : null
+}
